@@ -9,14 +9,14 @@ weightedGrids = {4:[
             ],
 
             8:[
-                10000 , 7000, 4000, 1000, 1000, 1000, 700, 500,
+                10000 , 7000, 5000, 4000, 4000, 4000, 1000, 1000,
                  7000, 3000, 1000, 1000, 1000, 1000, 1000, 1000,
-                 4000, 1000, 500, 500,500, 500, 500, 500,
-                 500, 500, 500, 500,500, 500, 500, 500,
-                 500, 500, 500, 500,500, 500, 500, 500,
-                 500, 500, 500, 500,500, 500, 500, 500,
-                 500, 500, 500, 500,500, 500, 500, 500,
-                 500, 500, 500, 500,500, 500, 500, 500
+                 5000, 3000, 2000, 2000,2000, 2000, 2000, 2000,
+                 2000, 2000, 2000, 2000,2000, 2000, 2000, 2000,
+                 4000, 2000, 2000, 2000,2000, 2000, 2000, 2000,
+                 4000, 2000, 2000, 2000,2000, 2000, 2000, 2000,
+                 4000, 2000, 2000, 2000,2000, 2000, 2000, 2000,
+                 4000, 2000, 2000, 2000,2000, 2000, 2000, 2000
             ]   
             }
 
@@ -134,7 +134,6 @@ def smallDifferentScore(grid):
 
             current = next
             next += 1
-
     return smoothness*10
 
 # Cong Them Diem Neu cac hang hay cot co cac so giong nhau
@@ -196,7 +195,10 @@ def maxValueAtCorner(grid):
     if TL in maxValPos or TR in maxValPos or BL in maxValPos or BR in maxValPos:
         return 5000
     else:
+        if grid[TL] == 2 or grid[TL] == 4 or grid[TL] == 8 or grid[TL] == 16:
+            return -7000
         return -5000
+        
 
 #Tinh diem theo trong so moi o
 def weightedGridScore(grid):
@@ -216,9 +218,9 @@ def calculateScore(grid):
 
     maxValScore = emptyValueScore(grid) * 100
     maxValScore = maxValueInGrid(grid) * 4
-    smallDiffScore = smallDifferentScore(grid) * 15
+    smallDiffScore = smallDifferentScore(grid) * 40
     simiScore = similarityScore(grid) * 40
-    positionOfMaxValueScore = maxValueAtCorner(grid) * 10
+    positionOfMaxValueScore = maxValueAtCorner(grid) * 30
     weightedScore = weightedGridScore(grid)
 
     return weightedScore + smallDiffScore + maxValScore + maxValScore + simiScore + positionOfMaxValueScore

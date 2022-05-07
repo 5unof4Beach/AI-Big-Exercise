@@ -182,7 +182,7 @@ class Game:
                 # in số ở ô vuông tương ứng
                 self.draw_number(temp, x, y, rect_width, rect_height)
 
-    # Hàm này dùng để in các số trên cacsc ô trên ma trân
+    # Hàm này dùng để in các số trên cac ô trên ma trân
     # Mỗi số có một màu khác nhau
     def draw_number(self, temp, x, y, rect_width, rect_height):
         if temp == 0:
@@ -229,11 +229,13 @@ class Game:
         self.screen.blit(message, message_rect)
         pygame.display.flip()
 
-    #in ra phânf thừa bên cạnh phải manf hình các thông sô và hướng dẫ nút
+    #in ra phan thừa bên cạnh phải manf hình các thông sô và hướng dẫ nút
     def _draw_side_screen(self):
         remain = self.settings.screen_width - self.settings.screen_height
         self.print_message("Goal: " + str(self.settings.get_victory_point()), self.settings.screen_width - remain//2, 50)
         self.print_message("Button pressed: " + str(self.button_pressed_times) + " times", self.settings.screen_width - remain//2, 100)
+        self.print_message("b: AutoPlay", self.settings.screen_width - remain // 2, self.settings.screen_height - 200)
+        self.print_message("s: Stop AutoPlay", self.settings.screen_width - remain // 2, self.settings.screen_height - 150)
         self.print_message("Esc: Options Screen", self.settings.screen_width - remain // 2, self.settings.screen_height - 100)
         self.print_message("q: Exit Game", self.settings.screen_width - remain//2, self.settings.screen_height - 50)
 
