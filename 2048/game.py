@@ -30,7 +30,6 @@ class Game:
         self.not_end = True
         while True:
             self._check_events()
-            # self.botAutoPlay()
 
             if self._victory_check():
                 if self.not_end:
@@ -53,7 +52,28 @@ class Game:
             bot.createMiniMaxTree(2, self.gameplay.get_grid().flatten())
             self._button_pressed_process(bot.getMoves())
             print(bot.getMoves())
-            pygame.time.set_timer(pygame.USEREVENT, 1000)
+            # pygame.time.set_timer(pygame.USEREVENT, 1000)
+            order = self._check_events()
+            
+            if(order == 'stop'):
+                break
+
+            if self._victory_check():
+                break
+                if self.not_end:
+                    self._update_screen()
+                    self.not_end = False
+                self._print_victory_message()
+                continue
+
+            if self._gameover_check():
+                break
+                if self.not_end:
+                    self._update_screen()
+                    self.not_end = False
+                self._print_gameover_message()
+                continue
+            self._update_screen()
 
     def _update_screen(self):
         # Đây là hàm cập nhật màn hình đồ họa như đổ màu cho background,
@@ -77,7 +97,10 @@ class Game:
         # Đây là hàm nhận và xử lý nhập liệu người dùng mà ở đây là 4 phím mũi tên
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
-                self._check_key_down_event(event)
+                return self._check_key_down_event(event)
+            elif event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
 
     # Hàm này nhận sự kiện bấm nút của người dùng để xử lý
     def _check_key_down_event(self, event):
@@ -86,6 +109,9 @@ class Game:
 
         elif event.key == pygame.K_b:
             self.botAutoPlay()
+
+        elif event.key == pygame.K_s:
+            return 'stop'
 
         elif event.key == pygame.K_SPACE:
             print(self.gameplay.get_grid().flatten())
