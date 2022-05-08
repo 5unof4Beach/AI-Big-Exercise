@@ -17,7 +17,7 @@ class Game:
         self.screen = pygame.display.set_mode((self.settings.screen_width,
                                                self.settings.screen_height))
         self.settingscreen = SettingScreen(self)
-        self.floatingrect = Floatingrect(self)
+        # self.floatingrect = Floatingrect(self)
         self.gameplay = Gameplay()
         self.button_pressed_times = 0
         pygame.display.set_caption("2048")
@@ -50,9 +50,10 @@ class Game:
         while True:
             print(self.gameplay.get_grid().flatten())
             bot.createMiniMaxTree(2, self.gameplay.get_grid().flatten())
-            self._button_pressed_process(bot.getMoves())
-            print(bot.getMoves())
-            # pygame.time.set_timer(pygame.USEREVENT, 1000)
+            move = bot.getMoves()
+            self._button_pressed_process(move)
+            print(move)
+
             order = self._check_events()
             
             if(order == 'stop'):
@@ -81,7 +82,7 @@ class Game:
         # Cập nhật lại ma trận các ô vuông,
         # Và in ra phần màn hình trống bên cạnh 2 thông số là mốc chiến thắng, số lần bấm nút và 2 huong dẫn
         self.screen.fill(self.settings.bg_color)
-        self._update_floatingrect()
+        # self._update_floatingrect()
         self._update_grid()
         self._draw_side_screen()
         pygame.display.flip()
@@ -118,6 +119,7 @@ class Game:
             bot.createMiniMaxTree(2, self.gameplay.get_grid().flatten())
             self._button_pressed_process(bot.getMoves())
             print(bot.getMoves())
+            print(self.settings.grid_size)
             
         elif event.key == pygame.K_RIGHT:
             self._button_pressed_process('r')

@@ -2,22 +2,34 @@ import numpy
 import math
 
 weightedGrids = {4:[
-                1000 , 700, 400, 200,
-                 700, 300, 100, 100,
-                 400, 100, 100, 100,
-                 200, 100, 100, 100
+                10000 , 7000, 4000, 2000,
+                 7000, 3000, 1000, 1000,
+                 4000, 1000, 1000, 1000,
+                 2000, 1000, 1000, 1000
             ],
 
             8:[
-                10000 , 7000, 5000, 4000, 4000, 4000, 1000, 1000,
-                 7000, 3000, 1000, 1000, 1000, 1000, 1000, 1000,
+                10000 , 7000, 5000, 4000, 4000, 2000, 2000, 2000,
+                 7000, 5000, 3000, 2000, 2000, 2000, 2000, 2000,
                  5000, 3000, 2000, 2000,2000, 2000, 2000, 2000,
+                 4000, 2000, 2000, 2000,2000, 2000, 2000, 2000,
+                 4000, 2000, 2000, 2000,2000, 2000, 2000, 2000,
                  2000, 2000, 2000, 2000,2000, 2000, 2000, 2000,
-                 4000, 2000, 2000, 2000,2000, 2000, 2000, 2000,
-                 4000, 2000, 2000, 2000,2000, 2000, 2000, 2000,
-                 4000, 2000, 2000, 2000,2000, 2000, 2000, 2000,
-                 4000, 2000, 2000, 2000,2000, 2000, 2000, 2000
-            ]   
+                 2000, 2000, 2000, 2000,2000, 2000, 2000, 2000,
+                 2000, 2000, 2000, 2000,2000, 2000, 2000, 2000
+            ]
+
+            # ,   
+            # 8:[
+            #     65000 , 6400, 6300, 6200, 6100, 6000, 5900, 5800,
+            #      5000 , 5100, 5200, 5300, 5400, 5500, 5600, 5700,
+            #      4900, 4800, 4700, 4600,4500, 4400, 4300, 4200,
+            #      3400, 3500, 3600, 3700,3800, 3900, 4000, 4100,
+            #      3300, 3200, 3100, 3000,2900, 2800, 2700, 2600,
+            #      1800, 1900, 2000, 2100,2200, 2300, 2400, 2500,
+            #      1700, 1600, 1500, 1400,1300, 1200, 1100, 1000,
+            #      200, 300, 400, 500,600, 700, 800, 900
+            # ]   
             }
 
 def move(flattenedGrid, key):
@@ -136,9 +148,9 @@ def smallDifferentScore(grid):
             next += 1
     return smoothness*10
 
-# Cong Them Diem Neu cac hang hay cot co cac so giong nhau
-def similarityScore(grid):
-    similarityScores = [0, 0, 0, 0]
+# Cong Them Diem Neu cac hang hay cot co cac so tang hoac giam dan
+def growingRowScore(grid):
+    growingRowScores = [1, 1, 1, 1]
 
     # left/right direction
     for i in range(4):
@@ -154,9 +166,9 @@ def similarityScore(grid):
             nextValue = grid[i*4 + next]
 
             if currentValue > nextValue:
-                similarityScores[0] += nextValue - currentValue
+                growingRowScores[0] += nextValue - currentValue
             elif nextValue > currentValue:
-                similarityScores[1] += currentValue - nextValue
+                growingRowScores[1] += currentValue - nextValue
 
             current = next
             next += 1
@@ -175,13 +187,13 @@ def similarityScore(grid):
                 nextValue = grid[i + 4*next]
 
                 if currentValue > nextValue:
-                    similarityScores[2] += nextValue - currentValue
+                    growingRowScores[2] += nextValue - currentValue
                 elif nextValue > currentValue:
-                    similarityScores[3] += currentValue - nextValue
+                    growingRowScores[3] += currentValue - nextValue
             current = next
             next += 1
 
-    return 20* max(similarityScores[0], similarityScores[1]) + max(similarityScores[2], similarityScores[3])
+    return max(growingRowScores[0], growingRowScores[1]) + max(growingRowScores[2], growingRowScores[3])
 
 # Neu gia tri lon nhat cua grid nam o 1 trong 4 goc thi cong them diem
 def maxValueAtCorner(grid):
@@ -195,7 +207,7 @@ def maxValueAtCorner(grid):
     if TL in maxValPos or TR in maxValPos or BL in maxValPos or BR in maxValPos:
         return 5000
     else:
-        if grid[TL] == 2 or grid[TL] == 4 or grid[TL] == 8 or grid[TL] == 16:
+        if grid[TL] == 2 or grid[TL] == 4 or grid[TL] == 8 or grid[TL] == 16 or grid[size] == 2 or grid[size] == 4 or grid[TL + 1] == 2 or grid[TL + 1] == 4:
             return -7000
         return -5000
         
@@ -216,14 +228,14 @@ def weightedGridScore(grid):
 # Tinh tong diem de chon nuoc di
 def calculateScore(grid):
 
-    maxValScore = emptyValueScore(grid) * 100
-    maxValScore = maxValueInGrid(grid) * 4
-    smallDiffScore = smallDifferentScore(grid) * 40
-    simiScore = similarityScore(grid) * 40
-    positionOfMaxValueScore = maxValueAtCorner(grid) * 30
+    emptyValScore = emptyValueScore(grid) * 10000
+    maxValScore = maxValueInGrid(grid) * 10000
+    smallDiffScore = smallDifferentScore(grid) * 50
+    simiScore = -growingRowScore(grid) * 90
+    positionOfMaxValueScore = maxValueAtCorner(grid) * 90
     weightedScore = weightedGridScore(grid)
 
-    return weightedScore + smallDiffScore + maxValScore + maxValScore + simiScore + positionOfMaxValueScore
+    return weightedScore + smallDiffScore + emptyValScore + maxValScore + simiScore + positionOfMaxValueScore
 
 
 
