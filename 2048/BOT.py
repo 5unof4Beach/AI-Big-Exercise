@@ -3,16 +3,16 @@ from decisionMaking import *
 
 directions = ['u', 'd', 'l', 'r']
 
-def createMiniMaxTree(depth, currentGrid):
+def start(depth, currentGrid):
 
     global nodeScores
-    global childList
+    global childs
     global nodeNumber
 
     # Diem so cac node
-    nodeScores = [0 for x in range(50000)]
+    nodeScores = [0 for x in range(10000)]
     # So node con cua cac node cha
-    childList = [[0 for x in range(0)] for y in range(50000)]
+    childs = [[] for y in range(10000)]
     # so thu tu cac node
     nodeNumber = 1
 
@@ -20,7 +20,7 @@ def createMiniMaxTree(depth, currentGrid):
 
 def alphaBeta(node, grid, depth, alpha, beta):
     global nodeScores
-    global childList
+    global childs
     global nodeNumber
 
     # Dieu kien dung de quy
@@ -33,7 +33,7 @@ def alphaBeta(node, grid, depth, alpha, beta):
 
         for i in range(4):
             nodeNumber += 1
-            childList[node].append(nodeNumber)
+            childs[node].append(nodeNumber)
             if movable(grid, directions[i]) == True:
                 alpha = max(alpha, alphaBeta(nodeNumber, move(grid,directions[i]), depth - 1, alpha, beta))
 
@@ -43,26 +43,25 @@ def alphaBeta(node, grid, depth, alpha, beta):
         nodeScores[node] = alpha
         return alpha
 
-    # minimize: luot choi cua may tinh: may chi cos nhiem vu dawt 2 so 2 hoac 4 vao cac o trong
+    # minimize: luot choi cua may tinh: may chi co nhiem vu dat 2 so 2 hoac 4 vao cac o trong
     else:
         zeros = list(*numpy.where(grid == 0))
 
-        gridTable = [[0 for x in range(16)] for y in range(0) ]
-        gridTableScores = []
+        gridList = [[] for y in range(0)]
 
         for i in zeros:
             grid[i] = 2
-            gridTable.append(grid)
+            gridList.append(grid)
             grid[i] = 0
 
         for i in zeros:
             grid[i] = 4
-            gridTable.append(grid)
+            gridList.append(grid)
             grid[i] = 0
 
-        for i in gridTable:
+        for i in gridList:
             nodeNumber += 1
-            childList[node].append(nodeNumber)
+            childs[node].append(nodeNumber)
             beta = min(beta, alphaBeta(nodeNumber, i, depth-1, alpha, beta))
 
             if alpha >= beta:
@@ -71,9 +70,9 @@ def alphaBeta(node, grid, depth, alpha, beta):
         nodeScores[node] = beta
         return beta
 
-def getMoves():
+def getMove():
     bestValue = nodeScores[1] # node to tien
 
-    for i in childList[1]:
+    for i in childs[1]:
         if nodeScores[i] == bestValue:
-            return directions[childList[1].index(i)]
+            return directions[childs[1].index(i)]

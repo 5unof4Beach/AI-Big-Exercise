@@ -43,7 +43,6 @@ weightedGrids = {4:[
             }
 
 def move(flattenedGrid, key):
-    # temp = grid
     size = int(math.sqrt(len(flattenedGrid)))
     grid = numpy.zeros((size, size), dtype=int)
 
@@ -110,8 +109,9 @@ def maxValueInGrid(grid):
 
 # Cong them diem neu hieu cac o canh nhau nho
 def smallDifferentScore(grid):
-    smoothness = 0
+    diff = 0
     size = int(math.sqrt(len(grid)))
+    
 
     #Theo Hang
     for i in range(size):
@@ -130,7 +130,7 @@ def smallDifferentScore(grid):
 
             currentValue = grid[i*size + current]
             nextValue = grid[i*size + next]
-            smoothness -= abs(currentValue - nextValue)
+            diff -= abs(currentValue - nextValue)
 
             current = next
             next += 1
@@ -152,17 +152,17 @@ def smallDifferentScore(grid):
 
             currentValue = grid[current*size + i]
             nextValue = grid[next*size + i]
-            smoothness -= abs(currentValue - nextValue)
+            diff -= abs(currentValue - nextValue)
 
             current = next
             next += 1
-    return smoothness*10
+    return diff
 
 # Cong Them Diem Neu cac hang hay cot co cac so tang hoac giam dan
 def growingRowScore(grid):
     growingRowScores = [1, 1, 1, 1]
 
-    # left/right direction
+    # theo hang
     for i in range(4):
         current = 0
         next = current + 1
@@ -183,7 +183,7 @@ def growingRowScore(grid):
             current = next
             next += 1
 
-    #up/down direction
+    # Theo cot
         for i in range(4):
             current = 0
             next = current + 4
@@ -235,12 +235,12 @@ def weightedGridScore(grid):
     return score
 
 
-# Tinh tong diem de chon nuoc di
+# Tinh tong diem cho node
 def calculateScore(grid):
 
     emptyValScore = emptyValueScore(grid) * 10000
     maxValScore = maxValueInGrid(grid) * 10000
-    smallDiffScore = smallDifferentScore(grid) * 200
+    smallDiffScore = smallDifferentScore(grid) * 2000
     simiScore = -growingRowScore(grid) * 100
     positionOfMaxValueScore = maxValueAtCorner(grid) * 90
     weightedScore = weightedGridScore(grid)

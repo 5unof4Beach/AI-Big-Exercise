@@ -49,8 +49,8 @@ class Game:
     def botAutoPlay(self):
         while True:
             print(self.gameplay.get_grid().flatten())
-            bot.createMiniMaxTree(2, self.gameplay.get_grid().flatten())
-            move = bot.getMoves()
+            bot.start(2, self.gameplay.get_grid().flatten())
+            move = bot.getMove()
             self._button_pressed_process(move)
             print(move)
 
@@ -116,9 +116,9 @@ class Game:
 
         elif event.key == pygame.K_SPACE:
             print(self.gameplay.get_grid().flatten())
-            bot.createMiniMaxTree(2, self.gameplay.get_grid().flatten())
-            self._button_pressed_process(bot.getMoves())
-            print(bot.getMoves())
+            bot.start(2, self.gameplay.get_grid().flatten())
+            self._button_pressed_process(bot.getMove())
+            print(bot.getMove())
             
         elif event.key == pygame.K_RIGHT:
             self._button_pressed_process('r')
