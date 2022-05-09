@@ -50,7 +50,7 @@ class Game:
         while True:
             print(self.gameplay.get_grid().flatten())
             bot.start(2, self.gameplay.get_grid().flatten())
-            move = bot.getMove()
+            move = bot.go()
             self._button_pressed_process(move)
             print(move)
 
@@ -61,19 +61,11 @@ class Game:
 
             if self._victory_check():
                 break
-                if self.not_end:
-                    self._update_screen()
-                    self.not_end = False
-                self._print_victory_message()
-                continue
+
 
             if self._gameover_check():
                 break
-                if self.not_end:
-                    self._update_screen()
-                    self.not_end = False
-                self._print_gameover_message()
-                continue
+
             self._update_screen()
 
     def _update_screen(self):
@@ -117,8 +109,8 @@ class Game:
         elif event.key == pygame.K_SPACE:
             print(self.gameplay.get_grid().flatten())
             bot.start(2, self.gameplay.get_grid().flatten())
-            self._button_pressed_process(bot.getMove())
-            print(bot.getMove())
+            self._button_pressed_process(bot.go())
+            print(bot.go())
             
         elif event.key == pygame.K_RIGHT:
             self._button_pressed_process('r')

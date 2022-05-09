@@ -6,13 +6,13 @@ directions = ['u', 'd', 'l', 'r']
 def start(depth, currentGrid):
 
     global nodeScores
-    global childs
+    global children
     global nodeNumber
 
     # Diem so cac node
     nodeScores = [0 for x in range(10000)]
     # So node con cua cac node cha
-    childs = [[] for y in range(10000)]
+    children = [[] for y in range(10000)]
     # so thu tu cac node
     nodeNumber = 1
 
@@ -20,7 +20,7 @@ def start(depth, currentGrid):
 
 def alphaBeta(node, grid, depth, alpha, beta):
     global nodeScores
-    global childs
+    global children
     global nodeNumber
 
     # Dieu kien dung de quy
@@ -33,7 +33,7 @@ def alphaBeta(node, grid, depth, alpha, beta):
 
         for i in range(4):
             nodeNumber += 1
-            childs[node].append(nodeNumber)
+            children[node].append(nodeNumber)
             if movable(grid, directions[i]) == True:
                 alpha = max(alpha, alphaBeta(nodeNumber, move(grid,directions[i]), depth - 1, alpha, beta))
 
@@ -61,7 +61,7 @@ def alphaBeta(node, grid, depth, alpha, beta):
 
         for i in gridList:
             nodeNumber += 1
-            childs[node].append(nodeNumber)
+            children[node].append(nodeNumber)
             beta = min(beta, alphaBeta(nodeNumber, i, depth-1, alpha, beta))
 
             if alpha >= beta:
@@ -70,9 +70,9 @@ def alphaBeta(node, grid, depth, alpha, beta):
         nodeScores[node] = beta
         return beta
 
-def getMove():
+def go():
     bestValue = nodeScores[1] # node to tien
 
-    for i in childs[1]:
+    for i in children[1]:
         if nodeScores[i] == bestValue:
-            return directions[childs[1].index(i)]
+            return directions[children[1].index(i)]
