@@ -3,7 +3,6 @@ from decisionMaking import *
 
 directions = ['u', 'd', 'l', 'r']
 
-# Clears above arrays and making MiniMaXTree of given depth
 def createMiniMaxTree(depth, currentGrid):
 
     global nodeScores
@@ -17,10 +16,9 @@ def createMiniMaxTree(depth, currentGrid):
     # so thu tu cac node
     nodeNumber = 1
 
-    alphaBeta(1, currentGrid, 0, depth, -math.inf, math.inf)
+    alphaBeta(1, currentGrid, depth, -math.inf, math.inf)
 
-# Creating MiniMaxTree with alpha - beta pruning
-def alphaBeta(node, grid, parent, depth, alpha, beta):
+def alphaBeta(node, grid, depth, alpha, beta):
     global nodeScores
     global childList
     global nodeNumber
@@ -30,14 +28,14 @@ def alphaBeta(node, grid, parent, depth, alpha, beta):
         nodeScores[node] = calculateScore(grid)
         return nodeScores[node]
 
-    # maximize
+    # maximize: luot choi cua nguoi choi(BOT) voi 4 nuoc di tren duoi trai
     if depth%2 == 0:
 
         for i in range(4):
             nodeNumber += 1
             childList[node].append(nodeNumber)
             if movable(grid, directions[i]) == True:
-                alpha = max(alpha, alphaBeta(nodeNumber, move(grid,directions[i]), node, depth - 1, alpha, beta))
+                alpha = max(alpha, alphaBeta(nodeNumber, move(grid,directions[i]), depth - 1, alpha, beta))
 
             if alpha >= beta:
                 break #huy node 
@@ -45,7 +43,7 @@ def alphaBeta(node, grid, parent, depth, alpha, beta):
         nodeScores[node] = alpha
         return alpha
 
-    # minimize
+    # minimize: luot choi cua may tinh: may chi cos nhiem vu dawt 2 so 2 hoac 4 vao cac o trong
     else:
         zeros = list(*numpy.where(grid == 0))
 
@@ -63,20 +61,12 @@ def alphaBeta(node, grid, parent, depth, alpha, beta):
             grid[i] = 0
 
         for i in gridTable:
-            gridTableScores.append(calculateScore(i))
-
-        for i in range(4):
-            minimumScore = min(gridTableScores)
-            indexes = gridTableScores.index(minimumScore)
-
             nodeNumber += 1
             childList[node].append(nodeNumber)
-            beta = min(beta, alphaBeta(nodeNumber, gridTable[indexes], node, depth-1, alpha, beta))
+            beta = min(beta, alphaBeta(nodeNumber, i, depth-1, alpha, beta))
 
             if alpha >= beta:
                 break
-
-            gridTableScores[indexes] = math.inf
 
         nodeScores[node] = beta
         return beta

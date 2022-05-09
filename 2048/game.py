@@ -119,7 +119,6 @@ class Game:
             bot.createMiniMaxTree(2, self.gameplay.get_grid().flatten())
             self._button_pressed_process(bot.getMoves())
             print(bot.getMoves())
-            print(self.settings.grid_size)
             
         elif event.key == pygame.K_RIGHT:
             self._button_pressed_process('r')

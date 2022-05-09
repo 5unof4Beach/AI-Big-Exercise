@@ -18,8 +18,18 @@ weightedGrids = {4:[
                  2000, 2000, 2000, 2000,2000, 2000, 2000, 2000,
                  2000, 2000, 2000, 2000,2000, 2000, 2000, 2000
             ]
+            
+            # 8:[
+            #     10000 , 7000, 5000, 4000, 4000, 5000, 7000, 10000,
+            #      7000, 5000, 3000, 2000, 2000, 3000, 5000, 7000,
+            #      5000, 3000, 2000, 2000,2000, 2000, 3000, 5000,
+            #      4000, 2000, 2000, 2000,2000, 2000, 2000, 4000,
+            #      4000, 2000, 2000, 2000,2000, 2000, 2000, 4000,
+            #      5000, 3000, 2000, 2000,2000, 2000, 3000, 5000,
+            #      7000, 5000, 3000, 2000,2000, 3000, 5000, 7000,
+            #      10000 , 7000, 5000, 4000, 4000, 5000, 7000, 10000
+            # ]
 
-            # ,   
             # 8:[
             #     65000 , 6400, 6300, 6200, 6100, 6000, 5900, 5800,
             #      5000 , 5100, 5200, 5300, 5400, 5500, 5600, 5700,
@@ -230,8 +240,8 @@ def calculateScore(grid):
 
     emptyValScore = emptyValueScore(grid) * 10000
     maxValScore = maxValueInGrid(grid) * 10000
-    smallDiffScore = smallDifferentScore(grid) * 50
-    simiScore = -growingRowScore(grid) * 90
+    smallDiffScore = smallDifferentScore(grid) * 200
+    simiScore = -growingRowScore(grid) * 100
     positionOfMaxValueScore = maxValueAtCorner(grid) * 90
     weightedScore = weightedGridScore(grid)
 
