@@ -1,6 +1,6 @@
 import numpy
 import math
-
+#ma trận trọng số ứng vói mỗi 8x8 hoặc 4x4
 weightedGrids = {4:[
                 10000 , 7000, 4000, 2000,
                  7000, 3000, 1000, 1000,
@@ -222,7 +222,7 @@ def maxValueAtCorner(grid):
         return -5000
         
 
-#Tinh diem theo trong so moi o
+#Tính điểm theo trọng số mỗi ô
 def weightedGridScore(grid):
 
     size = int(math.sqrt(len(grid)))

@@ -99,10 +99,10 @@ class Game:
     def _check_key_down_event(self, event):
         if event.key == pygame.K_q:
             sys.exit()
-
+        # Ấn b để bot tự chơi
         elif event.key == pygame.K_b:
             self.botAutoPlay()
-
+        # Ấn s để dừng bot
         elif event.key == pygame.K_s:
             return 'stop'
 

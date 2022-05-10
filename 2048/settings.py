@@ -22,9 +22,9 @@ class Settings:
                              4096: (255, 59, 62)}
 
         self._victory_point = 2048
-        self.floatingrect_speed = 3
-        self.floatingrect_direction_horizontal = 1
-        self.floatingrect_direction_vertical = 1
+        # self.floatingrect_speed = 3
+        # self.floatingrect_direction_horizontal = 1
+        # self.floatingrect_direction_vertical = 1
 
     # @staticmethod
     def get_victory_point(self): # trả về mốc điểm chiến thắng
