@@ -30,12 +30,12 @@ def alphaBeta(node, grid, depth, alpha, beta):
 
     # maximize: luot choi cua nguoi choi(BOT) voi 4 nuoc di tren duoi trai
     if depth%2 == 0:
-
-        for i in range(4):
+        # chon 4 buoc di
+        for i in 'udlr':
             nodeNumber += 1
             children[node].append(nodeNumber)
-            if movable(grid, directions[i]) == True:
-                alpha = max(alpha, alphaBeta(nodeNumber, move(grid,directions[i]), depth - 1, alpha, beta))
+            if movable(grid, i) == True:
+                alpha = max(alpha, alphaBeta(nodeNumber, move(grid,i), depth - 1, alpha, beta))
 
             if alpha >= beta:
                 break #huy node 
