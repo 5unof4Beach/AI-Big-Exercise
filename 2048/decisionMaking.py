@@ -42,60 +42,6 @@ weightedGrids = {4:[
             # ]   
             }
 
-def move(flattenedGrid, key):
-    size = int(math.sqrt(len(flattenedGrid)))
-    grid = numpy.zeros((size, size), dtype=int)
-
-    for i in range(size):
-        grid[i][:] = flattenedGrid[i*size : size*(i + 1)]
-
-    for i in range(size):
-        flipped = False
-        if key in 'lr':  # nếu nhập vào là l hoặc r thì lấy hàng
-            row = grid[i, :]
-        else:
-            row = grid[:, i]  # u hoăc d thì lấy cột
-
-        if key in 'rd':  # nếu là r hoặc d thì lật ngược list để có thể tận dụng hàm get num
-            flipped = True
-            row = row[::-1]
-
-        notZeros = checkAndSum(row)  
-        newRow = numpy.zeros_like(row)  # tạo một hàng mới chỉ chứa số 0 có kích cỡ giống hàng cũ
-        newRow[:len(notZeros)] = notZeros  # gắn các giá trị != 0 vào mảng mới
-
-        if flipped:
-            newRow = newRow[::-1]
-
-        if key in 'lr':
-            grid[i, :] = newRow
-        else:
-            grid[:, i] = newRow
-
-    return grid.flatten()
-
-def checkAndSum(row):
-    notZeros = row[row != 0]
-    res = []
-    skip = False
-    for i in range(len(notZeros)):
-        if skip:
-            skip = False
-            continue
-        if i != len(notZeros) - 1 and notZeros[i] == notZeros[i + 1]:  # nếu 2 số liền nhau mà giống nhau thì cộng lại và cho vào mảng mới
-            sum = notZeros[i] * 2
-            res.append(sum)
-            skip = True
-        else:
-            res.append(notZeros[i])
-    return res
-
-def movable(grid, direction):
-    if all(grid.flatten() == move(grid, direction)):
-        return False
-    else:
-        return True
-
 
 # Cong rhem diem voi moi o trong
 def emptyValueScore(grid):

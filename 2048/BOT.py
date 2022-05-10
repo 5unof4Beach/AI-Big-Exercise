@@ -1,7 +1,8 @@
 import math
 from decisionMaking import *
 
-directions = ['u', 'd', 'l', 'r']
+# Cac huong di len xuong trai phai
+directions = 'udlr'
 
 def start(depth, currentGrid):
 
@@ -19,6 +20,7 @@ def start(depth, currentGrid):
     alphaBeta(1, currentGrid, depth, -math.inf, math.inf)
 
 def alphaBeta(node, grid, depth, alpha, beta):
+
     global nodeScores
     global children
     global nodeNumber
@@ -31,7 +33,7 @@ def alphaBeta(node, grid, depth, alpha, beta):
     # maximize: luot choi cua nguoi choi(BOT) voi 4 nuoc di tren duoi trai
     if depth%2 == 0:
         # chon 4 buoc di
-        for i in 'udlr':
+        for i in directions:
             nodeNumber += 1
             children[node].append(nodeNumber)
             if movable(grid, i) == True:
@@ -45,15 +47,18 @@ def alphaBeta(node, grid, depth, alpha, beta):
 
     # minimize: luot choi cua may tinh: may chi co nhiem vu dat 2 so 2 hoac 4 vao cac o trong
     else:
+        #danh sach cac vi tri co gia tri bang 0
         zeros = list(*numpy.where(grid == 0))
 
         gridList = [[] for y in range(0)]
 
+        #Dat cac so 2 vao cac o trong
         for i in zeros:
             grid[i] = 2
             gridList.append(grid)
             grid[i] = 0
 
+        #Dat cac so 4 vao cac o trong
         for i in zeros:
             grid[i] = 4
             gridList.append(grid)
@@ -76,3 +81,61 @@ def go():
     for i in children[1]:
         if nodeScores[i] == bestValue:
             return directions[children[1].index(i)]
+
+
+# ham di chuyen grid theo huong chi dinh giong move_event trong gameplay.py
+def move(flattenedGrid, key):
+    size = int(math.sqrt(len(flattenedGrid)))
+    grid = numpy.zeros((size, size), dtype=int)
+
+    for i in range(size):
+        grid[i][:] = flattenedGrid[i*size : size*(i + 1)]
+
+    for i in range(size):
+        flipped = False
+        if key in 'lr':  # nếu nhập vào là l hoặc r thì lấy hàng
+            row = grid[i, :]
+        else:
+            row = grid[:, i]  # u hoăc d thì lấy cột
+
+        if key in 'rd':  # nếu là r hoặc d thì lật ngược list để có thể tận dụng hàm get num
+            flipped = True
+            row = row[::-1]
+
+        notZeros = checkAndSum(row)  
+        newRow = numpy.zeros_like(row)  # tạo một hàng mới chỉ chứa số 0 có kích cỡ giống hàng cũ
+        newRow[:len(notZeros)] = notZeros  # gắn các giá trị != 0 vào mảng mới
+
+        if flipped:
+            newRow = newRow[::-1]
+
+        if key in 'lr':
+            grid[i, :] = newRow
+        else:
+            grid[:, i] = newRow
+
+    return grid.flatten()
+
+# ham xu ly cac so trong grid sau moi lan bam nut
+def checkAndSum(row):
+    notZeros = row[row != 0]
+    res = []
+    skip = False
+    for i in range(len(notZeros)):
+        if skip:
+            skip = False
+            continue
+        if i != len(notZeros) - 1 and notZeros[i] == notZeros[i + 1]:  # nếu 2 số liền nhau mà giống nhau thì cộng lại và cho vào mảng mới
+            sum = notZeros[i] * 2
+            res.append(sum)
+            skip = True
+        else:
+            res.append(notZeros[i])
+    return res
+
+# Kiem tra sau khi an nut di chuyen thi grid co bo thay doi hay khong
+def movable(grid, direction):
+    if all(grid.flatten() == move(grid, direction)):
+        return False
+    else:
+        return True
