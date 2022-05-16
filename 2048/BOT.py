@@ -17,9 +17,9 @@ def start(depth, currentGrid):
     # so thu tu cac node
     nodeNumber = 1
 
-    alphaBeta(1, currentGrid, depth, -math.inf, math.inf)
+    minimax(1, currentGrid, depth, -math.inf, math.inf)
 
-def alphaBeta(node, grid, depth, alpha, beta):
+def minimax(node, grid, depth, alpha, beta):
 
     global nodeScores
     global children
@@ -36,8 +36,8 @@ def alphaBeta(node, grid, depth, alpha, beta):
         for i in directions:
             nodeNumber += 1
             children[node].append(nodeNumber)
-            if movable(grid, i) == True:
-                alpha = max(alpha, alphaBeta(nodeNumber, move(grid,i), depth - 1, alpha, beta))
+            if movable(grid, i):
+                alpha = max(alpha, minimax(nodeNumber, move(grid,i), depth - 1, alpha, beta))
 
             if alpha >= beta:
                 break #huy node 
@@ -67,7 +67,7 @@ def alphaBeta(node, grid, depth, alpha, beta):
         for i in gridList:
             nodeNumber += 1
             children[node].append(nodeNumber)
-            beta = min(beta, alphaBeta(nodeNumber, i, depth-1, alpha, beta))
+            beta = min(beta, minimax(nodeNumber, i, depth-1, alpha, beta))
 
             if alpha >= beta:
                 break

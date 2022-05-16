@@ -187,7 +187,7 @@ def calculateScore(grid):
     emptyValScore = emptyValueScore(grid) * 10000
     maxValScore = maxValueInGrid(grid) * 10000
     smallDiffScore = smallDifferentScore(grid) * 2000
-    simiScore = -growingRowScore(grid) * 100
+    simiScore = growingRowScore(grid) * 100
     positionOfMaxValueScore = maxValueAtCorner(grid) * 90
     weightedScore = weightedGridScore(grid)
 
