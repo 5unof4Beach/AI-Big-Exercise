@@ -190,14 +190,14 @@ def weightedGridScore(grid, size):
 def calculateScore(grid):
     size = int(math.sqrt(len(grid)))
 
-    emptyValScore = emptyValueScore(grid) * 10000
-    maxValScore = maxValueInGrid(grid) * 10000
-    smallDiffScore = smallDifferenceScore(grid, size) * 2000
-    simiScore = growingRowScore(grid, size) * 100
-    positionOfMaxValueScore = maxValueAtCorner(grid, size) * 90
-    weightedScore = weightedGridScore(grid, size)
+    s1 = emptyValueScore(grid) * 10000
+    s2 = maxValueInGrid(grid) * 10000
+    s3 = smallDifferenceScore(grid, size) * 2000
+    s4 = growingRowScore(grid, size) * 100
+    s5 = maxValueAtCorner(grid, size) * 90
+    s6 = weightedGridScore(grid, size)
 
-    return weightedScore + smallDiffScore + emptyValScore + maxValScore + simiScore + positionOfMaxValueScore
+    return s1 + s2 + s3 + s4 + s5 + s6
 
 
 
