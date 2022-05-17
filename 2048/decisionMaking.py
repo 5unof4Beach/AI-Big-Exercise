@@ -1,22 +1,23 @@
 import numpy
 import math
 #ma trận trọng số ứng vói mỗi 8x8 hoặc 4x4
-weightedGrids = {4:[
+weightedGrids = {
+            4:[
                 10000 , 7000, 4000, 2000,
-                 7000, 3000, 1000, 1000,
-                 4000, 1000, 1000, 1000,
-                 2000, 1000, 1000, 1000
+                7000, 3000, 1000, 1000,
+                4000, 1000, 1000, 1000,
+                2000, 1000, 1000, 1000
             ],
 
             8:[
-                10000 , 7000, 5000, 4000, 4000, 2000, 2000, 2000,
-                 7000, 5000, 3000, 2000, 2000, 2000, 2000, 2000,
-                 5000, 3000, 2000, 2000,2000, 2000, 2000, 2000,
-                 4000, 2000, 2000, 2000,2000, 2000, 2000, 2000,
-                 4000, 2000, 2000, 2000,2000, 2000, 2000, 2000,
-                 2000, 2000, 2000, 2000,2000, 2000, 2000, 2000,
-                 2000, 2000, 2000, 2000,2000, 2000, 2000, 2000,
-                 2000, 2000, 2000, 2000,2000, 2000, 2000, 2000
+                7000 , 7000, 5000, 4000, 4000, 2000, 2000, 2000,
+                5000, 5000, 3000, 2000, 2000, 2000, 2000, 2000,
+                10000, 3000, 2000, 2000,2000, 2000, 2000, 2000,
+                4000, 2000, 2000, 2000,2000, 2000, 2000, 2000,
+                4000, 2000, 2000, 2000,2000, 2000, 2000, 2000,
+                2000, 2000, 2000, 2000,2000, 2000, 2000, 2000,
+                2000, 2000, 2000, 2000,2000, 2000, 2000, 2000,
+                2000, 2000, 2000, 2000,2000, 2000, 2000, 2000
             ]
             
             # 8:[
@@ -54,10 +55,8 @@ def maxValueInGrid(grid):
     return maxVal
 
 # Cong them diem neu hieu cac o canh nhau nho
-def smallDifferentScore(grid):
+def smallDifferenceScore(grid, size):
     diff = 0
-    size = int(math.sqrt(len(grid)))
-    
 
     #Theo Hang
     for i in range(size):
@@ -105,55 +104,62 @@ def smallDifferentScore(grid):
     return diff
 
 # Cong Them Diem Neu cac hang hay cot co cac so tang hoac giam dan
-def growingRowScore(grid):
-    growingRowScores = [1, 1, 1, 1]
+def growingRowScore(grid, size):
+    upX = 0
+    downX = 0
+    upY = 0
+    downY = 0
 
-    # theo hang
-    for i in range(4):
+    # Theo hang
+    for i in range(size):
         current = 0
         next = current + 1
-        while next < 4:
-            while next < 4 and grid[i*4 + next] == 0:
+        while next < size:
+            while next < size and grid[i*size + next] == 0:
                 next += 1
 
-            if next >= 4:
+            if next >= size:
                 next -= 1
-            currentValue = grid[i*4 + current]
-            nextValue = grid[i*4 + next]
+            currentValue = grid[i*size + current]
+            nextValue = grid[i*size + next]
 
+            #Tang theo chieu ngang
             if currentValue > nextValue:
-                growingRowScores[0] += nextValue - currentValue
+                upX += nextValue - currentValue
+            #Giam theo chieu ngang
             elif nextValue > currentValue:
-                growingRowScores[1] += currentValue - nextValue
+                downX += currentValue - nextValue
 
             current = next
             next += 1
 
     # Theo cot
-        for i in range(4):
+        for i in range(size):
             current = 0
-            next = current + 4
-            while next < 4:
-                while next < 4 and grid[i + 4*next] == 0:
+            next = current + size
+            while next < size:
+                while next < size and grid[i + size*next] == 0:
                     next += 1
 
-                if next >= 4:
+                if next >= size:
                     next -= 1
-                currentValue = grid[i + 4*current]
-                nextValue = grid[i + 4*next]
+                currentValue = grid[i + size*current]
+                nextValue = grid[i + size*next]
 
+                #Tang theo chieu doc
                 if currentValue > nextValue:
-                    growingRowScores[2] += nextValue - currentValue
+                    upY += nextValue - currentValue
+                #Giam theo chieu doc
                 elif nextValue > currentValue:
-                    growingRowScores[3] += currentValue - nextValue
+                    downY += currentValue - nextValue
             current = next
             next += 1
 
-    return max(growingRowScores[0], growingRowScores[1]) + max(growingRowScores[2], growingRowScores[3])
+    return max(upX, downX) + max(upY, downY)
 
 # Neu gia tri lon nhat cua grid nam o 1 trong 4 goc thi cong them diem
-def maxValueAtCorner(grid):
-    size = int(math.sqrt(len(grid)))
+def maxValueAtCorner(grid, size):
+
     TL = 0
     TR = size - 1
     BR = size**2 - 1
@@ -169,9 +175,8 @@ def maxValueAtCorner(grid):
         
 
 #Tính điểm theo trọng số mỗi ô
-def weightedGridScore(grid):
+def weightedGridScore(grid, size):
 
-    size = int(math.sqrt(len(grid)))
     weightedGrid = weightedGrids[size]
     score = 0
 
@@ -183,13 +188,14 @@ def weightedGridScore(grid):
 
 # Tinh tong diem cho node
 def calculateScore(grid):
+    size = int(math.sqrt(len(grid)))
 
     emptyValScore = emptyValueScore(grid) * 10000
     maxValScore = maxValueInGrid(grid) * 10000
-    smallDiffScore = smallDifferentScore(grid) * 2000
-    simiScore = growingRowScore(grid) * 100
-    positionOfMaxValueScore = maxValueAtCorner(grid) * 90
-    weightedScore = weightedGridScore(grid)
+    smallDiffScore = smallDifferenceScore(grid, size) * 2000
+    simiScore = growingRowScore(grid, size) * 100
+    positionOfMaxValueScore = maxValueAtCorner(grid, size) * 90
+    weightedScore = weightedGridScore(grid, size)
 
     return weightedScore + smallDiffScore + emptyValScore + maxValScore + simiScore + positionOfMaxValueScore
 

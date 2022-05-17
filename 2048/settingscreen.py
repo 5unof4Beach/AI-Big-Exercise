@@ -90,7 +90,7 @@ class SettingScreen:
         self._draw_option_box(self.settings.screen_width - self.x - 110,
                               self.settings.screen_height - self.y - 110, 60, 60, "PLAY", 2)
 
-    def _draw_option_box(self, x, y, box_width, box_height, number, color_num):#hàm hỗ trợ cho việc vẽ các ô vuông
+    def _draw_option_box(self, x, y, box_width, box_height, number, color_num):# Hàm hỗ trợ cho việc vẽ các ô vuông
         option_box_color = {1: (246, 124, 96),
                             2: (150, 90, 70),
                             3: (238, 199, 82)}
@@ -100,7 +100,7 @@ class SettingScreen:
                          box, False, 15)
         self._draw_whatever(number, x, y, box_width, box_height)
 
-    def _draw_whatever(self, message, x, y, rect_width, rect_height, size=30):#hàm hỗ trợ cho việc in số lên các ô vuông lựa chọn đã được vẽ ra màn hình
+    def _draw_whatever(self, message, x, y, rect_width, rect_height, size=30):# Hàm hỗ trợ cho việc in số lên các ô vuông lựa chọn đã được vẽ ra màn hình
         temp_font = pygame.font.SysFont('clear sans', size, bold=True)
         number = temp_font.render(str(message), True, (10, 10, 10))
         number_rect = number.get_rect()

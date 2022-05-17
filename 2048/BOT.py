@@ -11,9 +11,9 @@ def start(depth, currentGrid):
     global nodeNumber
 
     # Diem so cac node
-    nodeScores = [0 for x in range(10000)]
+    nodeScores = [0 for x in range(5000)]
     # So node con cua cac node cha
-    children = [[] for y in range(10000)]
+    children = [[] for y in range(5000)]
     # so thu tu cac node
     nodeNumber = 1
 

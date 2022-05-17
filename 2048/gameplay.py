@@ -62,8 +62,7 @@ class Gameplay:
             if skip:
                 skip = False
                 continue
-            if i != len(this_n) - 1 and this_n[i] == this_n[
-                i + 1]:  # nếu 2 số liền nhau mà giống nhau thì cộng lại và cho vào mảng mới
+            if i != len(this_n) - 1 and this_n[i] == this_n[i + 1]:  # nếu 2 số liền nhau mà giống nhau thì cộng lại và cho vào mảng mới
                 sum = this_n[i] * 2
                 res.append(sum)
                 skip = True
